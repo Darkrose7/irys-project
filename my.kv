@@ -1,0 +1,97 @@
+#WindowManager declaration for multiple screen
+WindowManager:
+    ScanWindow:
+    SendWindow:
+
+#Main window
+<ScanWindow>:
+    name: "scan"
+
+    Screen:
+        size: root.size
+
+        FloatLayout:
+            size: root.size
+
+            Camera:
+                id: camera
+                size_hint: None, None
+                size: root.size
+                resolution: self.width, self.height
+                play: True
+                allow_stretch: True
+                keep_ratio: False
+
+            Label:
+                id: mode_text
+                text: root.mode_text
+                font_size: "32dp"
+                color: 1, 1, 1, 0
+
+            Button:
+                size_hint: None, None
+                size: "75dp", "75dp"
+                background_color: 0, 0, 0, 0
+                pos_hint: {'center_x': 0.5, "top": 0.2}
+                on_press:
+                    if root.is_scanning_mode: root.on_click()
+                    else: \
+                    app.root.current = "send"; \
+                    root.manager.transition.direction = "left"
+                    root.teach_network(camera.texture)
+
+
+                Image:
+                    id: photo_button
+                    source: "images/photo_button.png"
+                    size_hint: None, None
+                    size: "75dp", "75dp"
+                    allow_stretch: True
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+            #Next screen button
+            MDRaisedButton:
+                text: "Change mode"
+                size_hint: (None, None)
+                pos_hint: {'right': 0.95, "top": 0.1}
+                on_release:
+                    root.change_mode()
+                    root.animate_it(mode_text)
+
+<SendWindow>:
+    name: "send"
+
+    Screen:
+        size: root.size
+
+        canvas.before:
+            Color:
+                rgba: 31/255, 33/255, 36/255, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            size: root.size
+            orientation: "vertical"
+
+            Label:
+                text: "What is it?"
+                font_size: 30
+                size_hint: (None, None)
+                size: root.width, 100
+
+            Image:
+                texture: root.texture_to_send
+                id: photo
+                canvas.before:
+                    Color:
+                        rgba: 1, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            TextInput:
+                size_hint: None, None
+                size: 300, 200
