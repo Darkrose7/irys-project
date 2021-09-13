@@ -1,7 +1,7 @@
 #WindowManager declaration for multiple screen
 WindowManager:
     ScanWindow:
-    SendWindow:
+    SettingsWindow:
 
 #Main window
 <ScanWindow>:
@@ -36,8 +36,6 @@ WindowManager:
                 on_press:
                     if root.is_scanning_mode: root.on_click()
                     else: \
-                    app.root.current = "send"; \
-                    root.manager.transition.direction = "left"
                     root.teach_network(camera.texture)
 
 
@@ -59,8 +57,8 @@ WindowManager:
                     root.change_mode()
                     root.animate_it(mode_text)
 
-<SendWindow>:
-    name: "send"
+<SettingsWindow>:
+    name: "settings"
 
     Screen:
         size: root.size
@@ -95,3 +93,22 @@ WindowManager:
             TextInput:
                 size_hint: None, None
                 size: 300, 200
+
+<ObjectDescribePopup>:
+    BoxLayout:
+        orientation: "vertical"
+        size: root.size
+        pos: root.pos
+
+        Label:
+            text: "What is this? Type the name of object."
+
+        TextInput:
+            id: what_is_this
+            size_hint: None, None
+            size: root.width, 100
+
+        MDRaisedButton:
+            text: "Send"
+            on_release:
+                root.teach_network()

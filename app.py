@@ -1,10 +1,17 @@
 from kivy.animation import Animation
+from kivy.metrics import dp
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.widget import Widget
 from kivymd.app import MDApp
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.graphics.texture import Texture
 
 class WindowManager(ScreenManager):
+    pass
+
+class ObjectDescribePopup(Widget):
     pass
 
 class ScanWindow(Screen):
@@ -16,7 +23,13 @@ class ScanWindow(Screen):
         print("scan")
 
     def teach_network(self, texture):
-        SendWindow.load_texture(texture)
+        print(texture)
+
+        show = ObjectDescribePopup()
+        is_open = True
+        popup_window = Popup(title="What did you photograph?", content=show, size_hint=(None, None), size=(dp(500), dp(300)))
+
+        popup_window.open()
 
     def change_mode(self):
         self.is_scanning_mode = not self.is_scanning_mode
@@ -35,7 +48,7 @@ class ScanWindow(Screen):
         )
         animate.start(widget)
 
-class SendWindow(Screen):
+class SettingsWindow(Screen):
 
     texture_to_send = None
 
